@@ -327,7 +327,47 @@
       <input type="hidden" name="citizenship_button" value="on">
     </div>
     <div class="fourth-box">
-      <div class="citizenship-container" id="citizenshipContainer"></div>
+      <div class="citizenship-container" id="citizenshipContainer">
+          {% if editing and applicant.children %}
+          {% for c in applicant.overseas_entries %}
+          <p class="citizenship-num">Citizenship #${i}</p>
+          <div class="citizenship-first">
+            <div class="citizenship-first-text">
+              <p>19.a. APPLICANT’S CURRENT FOREIGN CITIZENSHIPS</p>
+              <p>19.b. MODE OF ACQUISITION OF FOREIGN CITIZENSHIPS</p>
+              <p>20.a. DATE OF ACQUISITION OF FOREIGN CITIZENSHIPS</p>
+            </div>
+            <div class="citizenship-first-input">
+              <input type="text" name="applicant_foreign_citizenship[]" class="citizenship-input1" value="{{ c.applicant_foreign_citizenship}}">
+              <input type="text" name="acquisition_foreign_citizenship[]" class="citizenship-input2" value="{{ c.acquisition_foreign_citizenship}}">
+              <input type="date" name="date_acquisition[]" class="citizenship-input3" value="{{ c.date_acquisition}}">
+            </div>
+          </div>
+          <div class="citizenship-first">
+            <div class="citizenship-first-text">
+              <p>20.b. NATURALIZATION CERTIFICATE NUMBERS</p>
+              <p>21.a. FOREIGN PASSPORT NO.</p>
+              <p>21.b. DATE OF ISSUANCE OF FOREIGN PASSPORT</p>
+            </div>
+            <div class="citizenship-first-input">
+              <input type="text" name="naturalization_no[]" class="citizenship-input1" value="{{ c.naturalization_no}}">
+              <input type="text" name="foreign_passport_no[]" class="citizenship-input2" value="{{ c.foreign_passport_no}}">
+              <input type="date" name="date_issuance[]" class="citizenship-input3" value="{{ c.date_issuance}}">
+            </div>
+          </div>
+          <div class="citizenship-first">
+            <div class="citizenship-first-text">
+              <p>22. Place of Issuance</p>
+              <p>23. FOREIGN DOCUMENT</p>
+            </div>
+            <div class="citizenship-first-input">
+              <input type="text" name="place_issuance[]" class="citizenship-input1" value="{{ c.place_issuance}}">
+              <input type="text" name="foreign_supporting_docs[]" class="citizenship-input2" value="{{ c.foreign_supporting_docs}}">
+            </div>
+          </div>
+          {% endfor %}
+          {% endif %}
+      </div>
     </div>
     <div class="question">
       <p class="citizenship-question">How many children do you have?</p>
@@ -337,7 +377,67 @@
       <input type="hidden" name="child_button" value="on">
     </div>
       <div class="fifth-box">
-        <div class="child-container" id="childContainer"></div>
+        <div class="child-container" id="childContainer">
+          {% if editing and applicant.children %}
+          {% for ch in applicant.children %}
+        <p class="child-num">Child #${i}</p>
+        
+        <div class="child-first">
+          <p class="a24">24.a. Child's name</p>
+          <div class="child-first-text">
+            <p class="a24-name">First Name - Middle Name - Last Name</p>
+              <p class="b24">24.b. GENDER</p>
+            <input type="radio" name="child_gender_${i}" value="M" {% if ch.child_gender == 'M' %}checked{% endif %}>
+            <label class="gender-text">MALE</label>
+            <input type="radio" name="child_gender_${i}" value="F" {% if ch.child_gender == 'F' %}checked{% endif %}>
+            <label class="gender-text">FEMALE</label>
+          </div>
+          <input type="text" class="child-name-input" name="child_name[]" value="{{ ch.child_name}}">
+        </div>
+
+        <div class="child-second">
+          <p class="c24">24.c. CIVIL STATUS:</p>
+          <input type="radio" name="child_status_${i}" value="S"  {% if ch.child_status == 'S' %}checked{% endif %}><label class="civil-status-choice">SINGLE</label>
+          <input type="radio" name="child_status_${i}" value="M"  {% if ch.child_status == 'M' %}checked{% endif %}><label class="civil-status-choice">MARRIED</label>
+          <input type="radio" name="child_status_${i}" value="D"  {% if ch.child_status == 'D' %}checked{% endif %}><label class="civil-status-choice">DIVORCED</label>
+          <input type="radio" name="child_status_${i}" value="W"  {% if ch.child_status == 'W' %}checked{% endif %}><label class="civil-status-choice">WIDOW/ER</label>
+          <input type="radio" name="child_status_${i}" value="O"  {% if ch.child_status == 'O' %}checked{% endif %}><label class="civil-status-choice">OTHERS</label>
+          <input type="text" name="child_status_other[]" class="child-civil-status-others" value="{{ ch.child_status_other}}">
+        </div>
+
+        <div class="child-third">
+          <div class="child-third-text">
+              <p class="d24">24.d. Date of Birth</p>
+              <p class="e24">24.e. Place of Birth</p>
+              <p class="f24">24.f. Countries of Citizenship</p>
+            </div>
+          <div class="child-third-input">
+            <input type="date" name="child_dob[]" class="child-birthday" value="{{ ch.child_dob}}">
+            <input type="text" name="child_birthplace[]" class="child-birthplace-input" value="{{ ch.child_birthplace}}">
+            <input type="text" name="child_citizenship[]" class="child-citizenship-input" value="{{ ch.child_citizenship}}">
+          </div>
+        </div>
+
+        <div class="child-fourth">
+          <p>24.g. Country of Permanent Residence</p>
+          <input type="text" name="child_residence[]" class="child-residence-input" value="{{ ch.child_residence}}">
+        </div>
+
+        <div class="child-fifth">
+          <p>24.h. SUPPORTING DOCUMENTS:</p>
+          <label><input type="checkbox" name="child_docs_${i}[]" value="ph_birth_cert" {% if 'ph_birth_cert' in ch.child_docs %}checked{% endif %}> Philippine Birth Certificate</label><br>
+          <label><input type="checkbox" name="child_docs_${i}[]" value="old_passport"  {% if 'old_passport' in ch.child_docs %}checked{% endif %}> Old Philippine Passport</label><br>
+          <label><input type="checkbox" name="child_docs_${i}[]" value="foreign_birth_cert"  {% if 'foreign_birth_cert' in ch.child_docs %}checked{% endif %}> Foreign Birth Certificate</label><br>
+          <label><input type="checkbox" name="child_docs_${i}[]" value="foreign_passport"  {% if 'foreign_passport' in ch.child_docs %}checked{% endif %}> Foreign Passport</label>
+        </div>
+
+        <div class="child-sixth">
+          <p>24.i. IMMIGRATION DOCUMENTS:</p>
+          <input type="text" name="child_immigration_docs[]" class="immigration-input" value="{{ ch.child_immigration_docs}}">
+        </div>
+        {% endfor %}
+        {% endif %}
+        </div>
     </div>
       <button class="submit-button" type="submit" name="action" value="{{ 'update' if editing else 'submit' }}">
         {{ 'Update' if editing else 'Submit' }}
@@ -348,6 +448,7 @@
     <img src="{{ url_for('static', filename='Images/footer.png') }}" class="FooterPNG">
   </div>
 <script>
+  const isEditing = {{ editing|tojson }};
   
   function generateCitizenships() {
     const count = parseInt(document.getElementById("citizenshipCount").value);
@@ -356,6 +457,9 @@
     container.innerHTML = '';
 
     for (let i = 1; i <= count; i++) {
+    if (isEditing) {
+      return;
+    }
       const block = document.createElement("div");
       block.className = "citizenship-entry";
 
@@ -401,6 +505,9 @@
   }
 
   function generateChildren() {
+  if (isEditing) {
+      return;
+    }
   const count = parseInt(document.getElementById("childCount").value);
   document.getElementById("no_of_child_included").value = count;
   const container = document.getElementById("childContainer");
